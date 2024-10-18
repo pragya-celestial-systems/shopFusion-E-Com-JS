@@ -1,24 +1,14 @@
 #categories {
-    height:50px;
-    box-shadow: 0 0 15px lightgrey;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+  height: 50px;
+  box-shadow: 0 0 15px lightgrey;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .category-title {
-    margin: 0 1rem 0 0 ;
-    font-weight: 500;
-}
-
-footer {
-    position: absolute;
-    bottom: 0;
-    height: 10vh;
-    background: lightgrey;
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  margin: 0 1rem 0 0;
+  font-weight: 500;
+  cursor: pointer;
 }

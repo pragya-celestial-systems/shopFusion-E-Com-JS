@@ -1,17 +1,8 @@
-export function createCategory(title){
-    const titleEl = document.createElement('p');
-    titleEl.classList.add('category-title');
-    titleEl.textContent = title;
+export function createCategories(categories) {
+  const categoriesContainer = document.querySelector("#categories");
 
-    return titleEl;
-}
-
-export function createCategories(categories){
-    const categoriesContainer = document.getElementById('categories');
-
-    categories.forEach(title => {
-        const categoryEl = createCategory(title);
-        console.log(categoryEl);
-        categoriesContainer.appendChild(categoryEl);
-    });
+  categories.forEach((title) => {
+    const categoryEl = `<p class="category-title">${title}</p>`;
+    categoriesContainer.insertAdjacentHTML("afterbegin", categoryEl);
+  });
 }
