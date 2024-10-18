@@ -1,0 +1,17 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.fa-cart-shopping, .fa-right-to-bracket {
+    font-size: 1.8rem;
+    color: grey;
+}
+
+#authorName {
+    margin-left: 5px;
+}
