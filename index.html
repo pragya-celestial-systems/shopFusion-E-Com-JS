@@ -29,9 +29,9 @@
     <!-- stylesheeta -->
     <link rel="stylesheet" href="./app.css" />
     <link rel="stylesheet" href="./css/categories.css" />
-    <link rel="stylesheet" href="./css/product.card.css">
+    <link rel="stylesheet" href="./css/product.card.css" />
 
-    <title>E-Com App</title>
+    <title>ShopFusion</title>
   </head>
   <body>
     <!-- Navbar -->
@@ -76,11 +76,17 @@
     <section id="categories"></section>
 
     <!-- products -->
-    <main></main>
+    <main>
+      <div id="loader">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </main>
 
-  <div id="loadMore">
-    <button class="btn btn-outline-primary">Load more...</button>
-  </div>
+    <div id="loadMore">
+      <button class="btn btn-outline-primary">Load more...</button>
+    </div>
 
     <!-- footer -->
     <footer>
