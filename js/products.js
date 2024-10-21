@@ -3,7 +3,7 @@ import { fetchData } from "./data.js";
 const productDetailsContainer = document.querySelector("#productContainer");
 const productsContainer = document.querySelector("main");
 const loadMoreButton = document.querySelector("#loadMore");
-const messageEl = document.querySelector("#message");
+
 let allItems,
   visibleItems = 5;
 
@@ -24,9 +24,24 @@ export function renderItems(products) {
 
   // Hide "Load More" button if all items are visible
   if (visibleItems > allItems.length) {
+    console.log(visibleItems, allItems.length);
     loadMoreButton.style.display = "none";
-    messageEl.style.display = "block";
   }
+}
+
+export async function renderSearchResult(searchVal) {
+  const products = await fetchData();
+  const filteredProducts = products.filter((product) => {
+    if (
+      product.category.includes(searchVal) ||
+      product.title.includes(searchVal) ||
+      product.description.includes(searchVal)
+    ) {
+      return product;
+    }
+  });
+
+  renderItems(filteredProducts);
 }
 
 function displayProductPage(productData) {
@@ -79,19 +94,25 @@ function createProductCard(productData) {
           <h4 class="card-title">${productData.title}</h4>
           <hr />
           <div class="card-ratings-container">
-            <p class="rating"><i class="fa-solid fa-star"></i>${productData.rating.rate} Rating</p>
+            <p class="rating"><i class="fa-solid fa-star"></i>${
+              productData.rating.rate
+            } Rating</p>
             <p class="count">${productData.rating.count} Reviews</p>
           </div>
           <hr />
           <p class="price">$${productData.price}</p>
-          <p class="description">${productData.description}</p>
+          <p class="description">${
+            productData.description.length > 150
+              ? `${productData.description.slice(0, 145).trim()}...`
+              : productData.description
+          }</p>
         </div>
       </div>
       `;
 
   productsContainer.insertAdjacentHTML("beforeend", cardHtml);
 
-  const newCard = productsContainer.querySelector(".card-container");
+  const newCard = productsContainer.lastElementChild;
   addEventListenerOnCard(newCard, productData.id);
 }
 
@@ -116,7 +137,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const id = getParamsValue();
 
   if (id) {
-    const productData = await fetchData(null, id);
+    const productData = await fetchData(`/${id}`);
     displayProductPage(productData);
 
     // set the title of the page
@@ -126,7 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 loadMoreButton.addEventListener("click", async () => {
   visibleItems += 5;
-  const products = await fetchData(null, null, visibleItems);
+  const products = await fetchData(`?limit=${visibleItems}`);
   allItems = products;
   renderItems(products);
   maintainScrollPosition();

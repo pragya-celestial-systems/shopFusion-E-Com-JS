@@ -2,14 +2,26 @@
 
 import { displayCategories } from "./js/categories.js";
 import { fetchData } from "./js/data.js";
-import { getParamsValue, renderItems } from "./js/products.js";
+import {
+  getParamsValue,
+  renderItems,
+  renderSearchResult,
+} from "./js/products.js";
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
+    const contentContainer = document.querySelector("#content");
+    let searchVal;
+
+    // hide error page if there isn't any error
+    contentContainer.firstElementChild.classList.add("active-content");
+    contentContainer.firstElementChild.nextElementSibling.classList.remove(
+      "active-content"
+    );
+
     if (!getParamsValue()) {
       // display categories
-      const categories = await fetchData("all");
-
+      const categories = await fetchData("/categories");
       displayCategories(categories);
 
       // display products
@@ -23,15 +35,28 @@ window.addEventListener("DOMContentLoaded", async () => {
         document.querySelector("#loader").style.display = "none";
       }
 
-      document.querySelector(".form-control").addEventListener("input", (e) => {
-        const filteredProducts = products.filter((product) =>
-          product.title.includes(e.target.value)
-        );
-        console.log(filteredProducts);
+      document.querySelector("form").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        if (searchVal) {
+          renderSearchResult(searchVal);
+        }
       });
-      // add event listener on search bar
+
+      // if the search input is empty, display all the products
+      document.querySelector("input").addEventListener("input", (e) => {
+        if (e.target.value === "") {
+          renderItems(products);
+        } else {
+          searchVal = e.target.value;
+          renderSearchResult(searchVal);
+        }
+      });
     }
   } catch (error) {
-    console.error(error);
+    contentContainer.firstElementChild.classList.remove("active-content");
+    contentContainer.firstElementChild.nextElementSibling.classList.add(
+      "active-content"
+    );
   }
 });
