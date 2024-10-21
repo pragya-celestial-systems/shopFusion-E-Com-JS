@@ -1,6 +1,11 @@
-#categories {
-  height: 50px;
+#categoriesContainer {
   box-shadow: 0 0 15px lightgrey;
+}
+
+#categories {
+  width: 80%;
+  margin: auto;
+  height: 50px;
   padding: 1rem;
   display: flex;
   align-items: center;
