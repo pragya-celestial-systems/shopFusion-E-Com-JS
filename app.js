@@ -2,7 +2,7 @@
 
 import { displayCategories } from "./js/categories.js";
 import { fetchData } from "./js/data.js";
-import { displayProductCards, getParamsValue } from "./js/products.js";
+import { getParamsValue, renderItems } from "./js/products.js";
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -14,11 +14,11 @@ window.addEventListener("DOMContentLoaded", async () => {
 
       // display products
       const products = await fetchData();
-      displayProductCards(products);
+      renderItems(products);
 
       // display the loader
       if (products) {
-        document.querySelector("#loader").style.display = "none";
+        // document.querySelector("#loader").style.display = "none";
       } else {
         document.querySelector("#loader").style.display = "none";
       }

@@ -1,4 +1,4 @@
-export async function fetchData(categoryType, id) {
+export async function fetchData(categoryType, id, limit = 5) {
   let url;
 
   // set the url accrodingly
@@ -11,7 +11,7 @@ export async function fetchData(categoryType, id) {
   } else if (id) {
     url = `https://fakestoreapi.com/products/${id}`;
   } else {
-    url = "https://fakestoreapi.com/products?limit=5";
+    url = `https://fakestoreapi.com/products?limit=${limit}`;
   }
 
   // fetch the data

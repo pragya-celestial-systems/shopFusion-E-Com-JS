@@ -8,6 +8,7 @@
   border: 1px solid lightgrey;
   padding: 0 1rem;
   height: 225px;
+  overflow: scroll;
 }
 
 .card-container:hover {

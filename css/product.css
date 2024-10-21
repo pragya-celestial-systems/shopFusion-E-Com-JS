@@ -76,6 +76,11 @@ body {
   color: grey;
 }
 
+select {
+  /* color: grey; */
+  padding: 0.2rem 0.5rem;
+}
+
 #bottomContainer {
   margin-top: 2rem;
 }

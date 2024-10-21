@@ -1,5 +1,12 @@
 import { fetchData } from "./data.js";
 
+const productDetailsContainer = document.querySelector("#productContainer");
+const productsContainer = document.querySelector("main");
+const loadMoreButton = document.querySelector("#loadMore");
+const messageEl = document.querySelector("#message");
+let allItems,
+  visibleItems = 5;
+
 export function getParamsValue() {
   const currentUrl = window.location.href;
   const url = new URL(currentUrl);
@@ -8,9 +15,22 @@ export function getParamsValue() {
   return paramValue;
 }
 
+export function renderItems(products) {
+  productsContainer.innerHTML = "";
+  allItems = products;
+  products.slice(0, visibleItems).forEach((productData) => {
+    createProductCard(productData);
+  });
+
+  // Hide "Load More" button if all items are visible
+  if (visibleItems > allItems.length) {
+    loadMoreButton.style.display = "none";
+    messageEl.style.display = "block";
+  }
+}
+
 function displayProductPage(productData) {
   // create the product page and display that page
-  console.log(productData);
   const productPageHtml = `
 
         <div id="leftSide">
@@ -29,6 +49,13 @@ function displayProductPage(productData) {
           <h2 id="price">$ ${productData.price}</h2>
           <p id="deliveryText">Free Delivery<p>
           <p id="description">${productData.description}</p>
+          <select>
+            <option value="1">1</option>
+            <option value="1">2</option>
+            <option value="1">3</option>
+            <option value="1">4</option>
+            <option value="1">5 (max.)</option>
+          </select>
          </div>
           <div id="bottomContainer">
             <button type="button" class="btn btn-warning">Order Now</button>
@@ -38,7 +65,6 @@ function displayProductPage(productData) {
 
   `;
 
-  const productDetailsContainer = document.querySelector("#productContainer");
   productDetailsContainer.insertAdjacentHTML("afterbegin", productPageHtml);
 }
 
@@ -63,16 +89,19 @@ function createProductCard(productData) {
       </div>
       `;
 
-  const productsContainer = document.querySelector("main");
-  productsContainer.insertAdjacentHTML("afterbegin", cardHtml);
+  productsContainer.insertAdjacentHTML("beforeend", cardHtml);
 
   const newCard = productsContainer.querySelector(".card-container");
   addEventListenerOnCard(newCard, productData.id);
 }
 
-export function displayProductCards(products) {
-  products.forEach((product) => {
-    createProductCard(product);
+function maintainScrollPosition() {
+  const currentScrollPosition =
+    window.scrollY || document.documentElement.scrollTop;
+
+  window.scrollTo({
+    top: currentScrollPosition,
+    behavior: "auto",
   });
 }
 
@@ -93,4 +122,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     // set the title of the page
     document.title = productData.category;
   }
+});
+
+loadMoreButton.addEventListener("click", async () => {
+  visibleItems += 5;
+  const products = await fetchData(null, null, visibleItems);
+  allItems = products;
+  renderItems(products);
+  maintainScrollPosition();
 });

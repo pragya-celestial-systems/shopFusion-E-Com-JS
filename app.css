@@ -55,3 +55,9 @@ footer {
   justify-content: center;
   color: grey;
 }
+
+#message {
+  color: grey;
+  text-align: center;
+  display: none;
+}
