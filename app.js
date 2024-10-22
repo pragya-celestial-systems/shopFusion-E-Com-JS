@@ -1,17 +1,15 @@
 "usestrict";
 
-import { displayCategories } from "./js/categories.js";
+import { displayCategories, renderSearchByCategoryResults } from "./js/categories.js";
 import { GLOBAL } from "./js/global.js";
 import { fetchData } from "./js/httpHelper.js";
 import {
   getParamsValue,
   renderItems,
-  renderSearchByCategoryResults,
   renderSearchResult,
 } from "./js/products.js";
 
 const contentContainer = document.querySelector("#content");
-const loadMoreButton = document.querySelector("#loadMoreButton");
 const loadMoreContainer = document.querySelector("#loadMore");
 const loader = document.querySelector("#loader");
 let searchVal;

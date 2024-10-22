@@ -103,7 +103,7 @@ export function renderItems(products) {
 
 export async function renderSearchResult(searchVal) {
   try {
-    const products = await fetchData(`?limit=${GLOBAL.limit}`)
+    const products = await fetchData(`?limit=${GLOBAL.limit}`);
 
     // hide error page if there isn't any error
     productDetailsContainer?.firstElementChild.classList.add("active-content");
@@ -118,32 +118,6 @@ export async function renderSearchResult(searchVal) {
         product.title.includes(searchVal) ||
         product.description.includes(searchVal)
       ) {
-        return product;
-      }
-    });
-
-    renderItems(filteredProducts);
-  } catch (error) {
-    productDetailsContainer?.firstElementChild.classList.remove(
-      "active-content"
-    );
-    productDetailsContainer?.firstElementChild.nextElementSibling.classList.add(
-      "active-content"
-    );
-  }
-}
-
-export async function renderSearchByCategoryResults(category) {
-  try {
-    // hide error page if there isn't any error
-    productDetailsContainer?.firstElementChild.classList.add("active-content");
-    productDetailsContainer?.firstElementChild.nextElementSibling.classList.remove(
-      "active-content"
-    );
-
-    const products = await fetchData();
-    const filteredProducts = products.filter((product) => {
-      if (product.category.toLowerCase() === category.toLowerCase().trim()) {
         return product;
       }
     });
@@ -238,7 +212,6 @@ loadMoreButton.addEventListener("click", async () => {
     GLOBAL.limit += 5;
 
     const products = await fetchData(`?limit=${GLOBAL.limit}`);
-    console.log(products, GLOBAL.limit);
     allItems = products;
     renderItems(products);
     maintainScrollPosition();
