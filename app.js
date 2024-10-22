@@ -5,10 +5,13 @@ import { fetchData } from "./js/httpHelper.js";
 import {
   getParamsValue,
   renderItems,
+  renderSearchByCategoryResults,
   renderSearchResult,
 } from "./js/products.js";
 
 const contentContainer = document.querySelector("#content");
+const loadMoreButton = document.querySelector("#loadMore");
+const loader = document.querySelector("#loader");
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
@@ -30,9 +33,9 @@ window.addEventListener("DOMContentLoaded", async () => {
 
       // display the loader
       if (products) {
-        document.querySelector("#loader").style.display = "none";
+        loader.style.display = "none";
       } else {
-        document.querySelector("#loader").style.display = "none";
+        loader.style.display = "none";
       }
 
       renderItems(products);
@@ -40,19 +43,18 @@ window.addEventListener("DOMContentLoaded", async () => {
       // display search result if user submits the form (search by category)
       document.querySelector("form").addEventListener("submit", (e) => {
         e.preventDefault();
-
-        if (searchVal) {
-          renderSearchResult(searchVal, true);
-        }
+        renderSearchByCategoryResults(searchVal);
       });
 
       // if the search input is empty, display all the products
       document.querySelector("input").addEventListener("input", (e) => {
+        searchVal = e.target.value;
+
         if (e.target.value === "") {
-          document.querySelector('#loadMore').style.display = 'block';
+          loadMoreButton.style.display = "flex";
           renderItems(products);
         } else {
-          searchVal = e.target.value;
+          loadMoreButton.style.display = "none";
           renderSearchResult(searchVal);
         }
       });

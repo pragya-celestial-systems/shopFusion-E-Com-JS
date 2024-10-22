@@ -7,11 +7,14 @@ export function displayCategories(categories) {
     const categoryEl = `<p class="category-title">${title}</p>`;
     categoriesContainer.insertAdjacentHTML("beforeend", categoryEl);
 
-    categoriesContainer.lastElementChild.addEventListener("click", async (e) => {
-      renderSearchResult(e.target.innerText);
+    categoriesContainer.lastElementChild.addEventListener(
+      "click",
+      async (e) => {
+        renderSearchResult(e.target.innerText);
 
-      // hide the load more button
-      document.querySelector("#loadMore").style.display = "none";
-    });
+        // hide the load more button
+        document.querySelector("#loadMore").style.display = "none";
+      }
+    );
   });
 }
