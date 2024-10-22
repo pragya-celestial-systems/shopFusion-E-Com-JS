@@ -5,6 +5,7 @@ export async function fetchData(endpoint = "") {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error(error);
+    alert('Oops, something went wrong!');
   }
 }

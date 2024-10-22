@@ -1,6 +1,7 @@
 "usestrict";
 
 import { displayCategories } from "./js/categories.js";
+import { GLOBAL } from "./js/global.js";
 import { fetchData } from "./js/httpHelper.js";
 import {
   getParamsValue,
@@ -10,13 +11,13 @@ import {
 } from "./js/products.js";
 
 const contentContainer = document.querySelector("#content");
-const loadMoreButton = document.querySelector("#loadMore");
+const loadMoreButton = document.querySelector("#loadMoreButton");
+const loadMoreContainer = document.querySelector("#loadMore");
 const loader = document.querySelector("#loader");
+let searchVal;
 
 window.addEventListener("DOMContentLoaded", async () => {
   try {
-    let searchVal;
-
     // hide error page if there isn't any error
     contentContainer.firstElementChild.classList.add("active-content");
     contentContainer.firstElementChild.nextElementSibling.classList.remove(
@@ -29,7 +30,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       displayCategories(categories);
 
       // display products
-      const products = await fetchData();
+      const products = await fetchData(`?limit=${GLOBAL.limit}`);
 
       // display the loader
       if (products) {
@@ -51,10 +52,10 @@ window.addEventListener("DOMContentLoaded", async () => {
         searchVal = e.target.value;
 
         if (e.target.value === "") {
-          loadMoreButton.style.display = "flex";
+          loadMoreContainer.style.display = "flex";
           renderItems(products);
         } else {
-          loadMoreButton.style.display = "none";
+          loadMoreContainer.style.display = "none";
           renderSearchResult(searchVal);
         }
       });
