@@ -1,8 +1,9 @@
-import { fetchData } from "./data.js";
+import { fetchData } from "./httpHelper.js";
 
-const productDetailsContainer = document.querySelector("#productContainer");
+const productContainer = document.querySelector(".product-container");
 const productsContainer = document.querySelector("main");
 const loadMoreButton = document.querySelector("#loadMore");
+const productDetailsContainer = document.querySelector("#productDetailsContainer");
 
 let allItems,
   visibleItems = 5;
@@ -16,6 +17,18 @@ export function getParamsValue() {
 }
 
 export function renderItems(products) {
+  if(products.length <= 0){
+    productsContainer.innerHTML = "";
+    console.log(products);
+    const messageEl = `
+    <div id="messageContainer">
+      <p class="search-result-message">No items found.</p>
+    </div>
+    `
+    productsContainer?.insertAdjacentHTML("beforeend", messageEl);
+    return;
+  }
+
   productsContainer.innerHTML = "";
   allItems = products;
   products.slice(0, visibleItems).forEach((productData) => {
@@ -24,24 +37,36 @@ export function renderItems(products) {
 
   // Hide "Load More" button if all items are visible
   if (visibleItems > allItems.length) {
-    console.log(visibleItems, allItems.length);
     loadMoreButton.style.display = "none";
   }
 }
 
 export async function renderSearchResult(searchVal) {
-  const products = await fetchData();
-  const filteredProducts = products.filter((product) => {
-    if (
-      product.category.includes(searchVal) ||
-      product.title.includes(searchVal) ||
-      product.description.includes(searchVal)
-    ) {
-      return product;
-    }
-  });
+  try {
+    // hide error page if there isn't any error
+    productDetailsContainer?.firstElementChild.classList.add("active-content");
+    productDetailsContainer?.firstElementChild.nextElementSibling.classList.remove(
+      "active-content"
+    );
 
-  renderItems(filteredProducts);
+    const products = await fetchData();
+    const filteredProducts = products.filter((product) => {
+      if (
+        product.category.includes(searchVal) ||
+        product.title.includes(searchVal) ||
+        product.description.includes(searchVal)
+      ) {
+        return product;
+      }
+    });
+
+    renderItems(filteredProducts);
+  } catch (error) {
+    productDetailsContainer?.firstElementChild.classList.remove("active-content");
+    productDetailsContainer?.firstElementChild.nextElementSibling.classList.add(
+      "active-content"
+    );
+  }
 }
 
 function displayProductPage(productData) {
@@ -80,7 +105,7 @@ function displayProductPage(productData) {
 
   `;
 
-  productDetailsContainer.insertAdjacentHTML("afterbegin", productPageHtml);
+  productContainer?.insertAdjacentHTML("afterbegin", productPageHtml);
 }
 
 function createProductCard(productData) {
@@ -110,7 +135,7 @@ function createProductCard(productData) {
       </div>
       `;
 
-  productsContainer.insertAdjacentHTML("beforeend", cardHtml);
+  productsContainer?.insertAdjacentHTML("beforeend", cardHtml);
 
   const newCard = productsContainer.lastElementChild;
   addEventListenerOnCard(newCard, productData.id);
@@ -127,28 +152,62 @@ function maintainScrollPosition() {
 }
 
 function addEventListenerOnCard(element, id) {
-  element.addEventListener("click", () => {
-    // open product detail page on the new tab
-    window.open(`../product.html?id=${id}`, "_blank");
+  element.addEventListener("click", (e) => {
+    const targetVal = e.target.classList.value;
+
+    if (
+      targetVal === "card-img" ||
+      targetVal === "card-title" ||
+      targetVal === "description"
+    ) {
+      // open product detail page on the new tab
+      window.open(`../product.html?id=${id}`, "_blank");
+    }
   });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const id = getParamsValue();
+  try {
+    // hide error page if there isn't any error
+    productDetailsContainer?.firstElementChild.classList.add("active-content");
+    productDetailsContainer?.firstElementChild.nextElementSibling.classList.remove(
+      "active-content"
+    );
 
-  if (id) {
-    const productData = await fetchData(`/${id}`);
-    displayProductPage(productData);
+    const id = getParamsValue();
 
-    // set the title of the page
-    document.title = productData.category;
+    if (id) {
+      const productData = await fetchData(`/${id}`);
+      displayProductPage(productData);
+
+      // set the title of the page
+      document.title = productData.title;
+    }
+  } catch (error) {
+    productDetailsContainer?.firstElementChild.classList.remove("active-content");
+    productDetailsContainer?.firstElementChild.nextElementSibling.classList.add(
+      "active-content"
+    );
   }
 });
 
-loadMoreButton.addEventListener("click", async () => {
-  visibleItems += 5;
-  const products = await fetchData(`?limit=${visibleItems}`);
-  allItems = products;
-  renderItems(products);
-  maintainScrollPosition();
+loadMoreButton?.addEventListener("click", async () => {
+  try {
+    // hide error page if there isn't any error
+    productDetailsContainer?.firstElementChild.classList.add("active-content");
+    productDetailsContainer?.firstElementChild.nextElementSibling.classList.remove(
+      "active-content"
+    );
+
+    visibleItems += 5;
+    const products = await fetchData(`?limit=${visibleItems}`);
+    allItems = products;
+    renderItems(products);
+    maintainScrollPosition();
+  } catch (error) {
+    productDetailsContainer?.firstElementChild.classList.remove("active-content");
+    productDetailsContainer?.firstElementChild.nextElementSibling.classList.add(
+      "active-content"
+    );
+  }
 });
