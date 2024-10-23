@@ -72,7 +72,7 @@ function addEventListenerOnCard(element, id) {
       targetVal === "description"
     ) {
       // open product detail page on the new tab
-      window.open(`../product.html?id=${id}`, "_blank");
+      window.open(`../product.html?id=${id}`, "_self");
     }
   });
 }
