@@ -28,6 +28,6 @@
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/yourusername/shopfusion.git
+   git clone https://github.com/pragya-celestial-systems/shopfusion.git
 
 2. Open the live server.
